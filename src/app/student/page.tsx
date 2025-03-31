@@ -1,3 +1,11 @@
+'use client';
+
+import { startAttendanceCheck } from './record';
+
 export default function StudentPage() {
-  return <>student page</>;
+    return (
+        <>
+            <button onClick={() => startAttendanceCheck()}>start</button>
+        </>
+    );
 }
