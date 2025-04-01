@@ -22,6 +22,9 @@ export async function startAttendanceCheck() {
     };
 
     const analyser = ac.createAnalyser();
+    analyser.smoothingTimeConstant = 0;
+    analyser.fftSize = 1024;
+
     audioSource.connect(analyser);
 
     while (true) {
