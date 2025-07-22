@@ -1,3 +1,9 @@
+declare global {
+    interface Window {
+        webkitAudioContext?: typeof AudioContext;
+    }
+}
+
 import {
     AUTHCODE_LENGTH,
     FREQUENCY_SET,
