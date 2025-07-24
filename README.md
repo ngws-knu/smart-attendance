@@ -1,38 +1,47 @@
-# 2025_smart_attendance
+# Smart Attendance System
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This project is a **web-based attendance system** that allows professors and students to process attendance using sound signals.
+Built with Next.js, React, and TailwindCSS.
+
+## Features
+
+-   **Professor**: When starting attendance, periodically broadcasts a random authentication code as a sound signal (frequency) for a set period.
+-   **Student**: When starting attendance, records the sound signal via microphone, extracts the authentication code, and submits it to the server for verification.
+-   **Server**: Stores the latest authentication code from the professor and verifies the code submitted by students.
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+    ```bash
+    yarn install
+    # or
+    npm install
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run the development server
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+    ```bash
+    yarn dev
+    # or
+    npm run dev
+    ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+-   On the main screen, select either the **Student** or **Professor** menu.
+-   Professors start attendance to broadcast sound signals.
+-   Students start attendance to record and decode the signal, then automatically attempt attendance verification.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+-   Next.js (App Router)
+-   React 19
+-   TypeScript
+-   TailwindCSS
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-   Sound signals are generated and recorded using the browser's Audio API.
