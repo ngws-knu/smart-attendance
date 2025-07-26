@@ -11,27 +11,28 @@ import {
 } from '@/constants';
 import { sleep } from '@/util';
 
-export async function startAttendanceCheck() {
+export async function startAttendanceCheck({
+    name,
+    studentId,
+}: {
+    name: string;
+    studentId: string;
+}): Promise<boolean> {
     const ac = new (window.AudioContext || window.webkitAudioContext)();
-    ac.resume();
+    await ac.resume();
 
     const mediaStream = await navigator.mediaDevices.getUserMedia({
         audio: true,
     });
-    const mediaRecorder = new MediaRecorder(mediaStream);
-    const audioSource = ac.createMediaStreamSource(mediaStream);
-
-    const audioArray: Blob[] = [];
-
-    mediaRecorder.ondataavailable = (e) => {
-        audioArray.push(e.data);
-    };
 
     const analyser = ac.createAnalyser();
     analyser.smoothingTimeConstant = 0;
     analyser.fftSize = 1024;
+    ac.createMediaStreamSource(mediaStream).connect(analyser);
 
-    audioSource.connect(analyser);
+    const mediaRecorder = new MediaRecorder(mediaStream);
+    const audioArray: Blob[] = [];
+    mediaRecorder.ondataavailable = (e) => audioArray.push(e.data);
 
     while (true) {
         const code = await recordSignal(
@@ -41,8 +42,14 @@ export async function startAttendanceCheck() {
             ac.sampleRate
         );
 
-        console.log(code);
-        break;
+        const res = await fetch('/api/code', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, studentId, name }),
+        });
+
+        const { success } = await res.json();
+        if (success) return true;
     }
 }
 
@@ -60,13 +67,12 @@ async function recordSignal(
         audioArray.length = 0;
 
         mediaRecorder.start();
-        await sleep(SAMPLING_TIME_TO_MS + 2);
+        await sleep(SAMPLING_TIME_TO_MS);
         mediaRecorder.stop();
 
         audioArray.splice(0);
 
         analyser.getByteFrequencyData(dataArray);
-        console.log(i);
 
         const frequencyValues: [number, number] = [0, 0];
         for (let j = 0; j < FREQUENCY_SET.length; j++) {
