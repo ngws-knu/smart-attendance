@@ -14,6 +14,25 @@ export async function startAttendance() {
         i++
     ) {
         const authCode: string = generateAuthCode();
+
+        try {
+            const response = await fetch('/api/authcode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ code: authCode }),
+            });
+
+            if (!response.ok) {
+                console.error('Failed to send authcode to server');
+            } else {
+                console.log('Authcode sent to server successfully:', authCode);
+            }
+        } catch (error) {
+            console.error('Error sending authcode to server:', error);
+        }
+
         await playSignal(authCode);
     }
 }

@@ -8,6 +8,7 @@ const attendanceFile = path.join(process.cwd(), 'src/attendance.json');
 
 type AttendanceRecord = {
     studentId: string;
+    name: string;
     timestamp: number;
 };
 
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
     try {
-        const { code: submittedCode, studentId } = await req.json();
+        const { code: submittedCode, studentId, name } = await req.json();
         if (!submittedCode || typeof submittedCode !== 'string') {
             return NextResponse.json(
                 { error: 'Submitted code is required.' },
@@ -57,6 +58,12 @@ export async function PUT(req: NextRequest) {
         if (!studentId || typeof studentId !== 'string') {
             return NextResponse.json(
                 { error: 'studentId is required.' },
+                { status: 400 }
+            );
+        }
+        if (!name || typeof name !== 'string') {
+            return NextResponse.json(
+                { error: 'name is required.' },
                 { status: 400 }
             );
         }
@@ -75,10 +82,9 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ success: false }, { status: 200 });
         }
 
-        // 출결 성공 시 DB에 학생 정보 저장
         const attendance = await readAttendance();
         if (!attendance.find((item) => item.studentId === studentId)) {
-            attendance.push({ studentId, timestamp: Date.now() });
+            attendance.push({ studentId, name, timestamp: Date.now() });
             await writeAttendance(attendance);
         }
 

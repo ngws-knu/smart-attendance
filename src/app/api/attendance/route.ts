@@ -4,6 +4,7 @@ import path from 'path';
 
 type AttendanceRecord = {
     studentId: string;
+    name: string;
     timestamp: number;
 };
 
