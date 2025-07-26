@@ -42,7 +42,7 @@ export async function startAttendanceCheck({
             ac.sampleRate
         );
 
-        const res = await fetch('/api/code', {
+        const res = await fetch('/api/authcode', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code, studentId, name }),
