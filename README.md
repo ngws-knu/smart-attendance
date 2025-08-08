@@ -1,6 +1,7 @@
 # Smart Attendance System
 
 This project is a web-based attendance management system that utilizes acoustic signals for attendance management to prevent fraudulent attendees and can be easily introduced to many lecture halls.
+
 Built with Next.js.
 
 ## Features
